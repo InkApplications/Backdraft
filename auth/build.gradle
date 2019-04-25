@@ -1,0 +1,7 @@
+apply from: "../android-library.gradle"
+apply plugin: 'kotlin-kapt'
+
+dependencies {
+    api 'com.google.firebase:firebase-auth:16.1.0'
+}
+
