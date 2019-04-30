@@ -1,12 +1,15 @@
 package inkapplications.backdraft.auth
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GetTokenResult
 import inkapplications.backdraft.tasks.await
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowViaChannel
 import kotlinx.coroutines.launch
 
@@ -44,3 +47,12 @@ val FirebaseAuth.idTokenFlow: Flow<GetTokenResult?> get() = flowViaChannel { cha
     }
 }
 
+/**
+ * Flow that receives changes in the User/logged in state.
+ *
+ * @see FirebaseAuth.addAuthStateListener
+ */
+@FlowPreview
+val FirebaseAuth.userFlow: Flow<FirebaseUser?> get() = flow {
+    authStateFlow.collect { emit(it.currentUser) }
+}
