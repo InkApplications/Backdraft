@@ -2,10 +2,8 @@ package inkapplications.backdraft.auth
 
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowViaChannel
 
 /**
  * Flow that receives changes in Firebase's Authentication state.
@@ -13,14 +11,8 @@ import kotlinx.coroutines.flow.flow
  * @see FirebaseAuth.addAuthStateListener
  */
 @FlowPreview
-val FirebaseAuth.authStateFlow: Flow<FirebaseAuth> get() = flow {
-    val channel = Channel<FirebaseAuth>(Channel.UNLIMITED)
+val FirebaseAuth.authStateFlow: Flow<FirebaseAuth> get() = flowViaChannel { channel ->
     val listener: (FirebaseAuth) -> Unit = { channel.offer(it) }
     addAuthStateListener(listener)
-
-    try {
-        channel.consumeEach { emit(it) }
-    } finally {
-        removeAuthStateListener(listener)
-    }
+    channel.invokeOnClose { removeAuthStateListener(listener) }
 }
