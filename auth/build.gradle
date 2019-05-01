@@ -3,6 +3,6 @@ apply plugin: 'kotlin-kapt'
 
 dependencies {
     implementation project(":tasks")
-    api 'com.google.firebase:firebase-auth:16.1.0'
+    api 'com.google.firebase:firebase-auth:16.2.1'
 }
 

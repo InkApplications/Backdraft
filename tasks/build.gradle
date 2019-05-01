@@ -1,6 +1,6 @@
 apply from: "../android-library.gradle"
 
 dependencies {
-    api 'com.google.firebase:firebase-common:16.0.3'
+    api 'com.google.firebase:firebase-common:16.1.0'
 }
 
