@@ -1,2 +1,3 @@
 include "auth"
 include "tasks"
+include "firestore"
