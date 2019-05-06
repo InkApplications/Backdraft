@@ -9,11 +9,10 @@ import kotlinx.coroutines.flow.flowViaChannel
  */
 @FlowPreview
 val CollectionReference.snapshotFlow get() = flowViaChannel<QuerySnapshot?> { channel ->
-    val listener = EventListener<QuerySnapshot?> { snapshot, error ->
+    val registration = addSnapshotListener { snapshot, error ->
         if (error != null) throw error
         channel.offer(snapshot)
     }
-    val registration = addSnapshotListener(listener)
 
     channel.invokeOnClose { registration.remove() }
 }
