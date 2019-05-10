@@ -1,5 +1,0 @@
-apply from: "../android-library.gradle"
-
-dependencies {
-    implementation 'com.google.firebase:firebase-firestore-ktx:18.2.0'
-}
