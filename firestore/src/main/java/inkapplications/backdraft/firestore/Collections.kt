@@ -1,18 +1,21 @@
 package inkapplications.backdraft.firestore
 
 import com.google.firebase.firestore.*
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.flowViaChannel
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.callbackFlow
 
 /**
  * Send snapshot updates from a collection into a flow.
  */
 @FlowPreview
-val CollectionReference.snapshotFlow get() = flowViaChannel<QuerySnapshot?> { channel ->
+val CollectionReference.snapshotFlow get() = callbackFlow<QuerySnapshot?> {
     val registration = addSnapshotListener { snapshot, error ->
-        if (error != null) throw error
-        channel.offer(snapshot)
+        if (error != null) cancel(CancellationException("Snapshot returned Error", error))
+        else offer(snapshot)
     }
 
-    channel.invokeOnClose { registration.remove() }
+    awaitClose { registration.remove() }
 }

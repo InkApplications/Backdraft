@@ -7,10 +7,8 @@ import inkapplications.backdraft.tasks.await
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowViaChannel
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 /**
@@ -19,10 +17,10 @@ import kotlinx.coroutines.launch
  * @see FirebaseAuth.addAuthStateListener
  */
 @FlowPreview
-val FirebaseAuth.authStateFlow: Flow<FirebaseAuth> get() = flowViaChannel { channel ->
-    val listener: (FirebaseAuth) -> Unit = { channel.offer(it) }
+val FirebaseAuth.authStateFlow: Flow<FirebaseAuth> get() = callbackFlow {
+    val listener: (FirebaseAuth) -> Unit = { offer(it) }
     addAuthStateListener(listener)
-    channel.invokeOnClose { removeAuthStateListener(listener) }
+    awaitClose { removeAuthStateListener(listener) }
 }
 
 /**
@@ -31,17 +29,17 @@ val FirebaseAuth.authStateFlow: Flow<FirebaseAuth> get() = flowViaChannel { chan
  * @see FirebaseAuth.addIdTokenListener
  */
 @FlowPreview
-val FirebaseAuth.idTokenFlow: Flow<GetTokenResult?> get() = flowViaChannel { channel ->
+val FirebaseAuth.idTokenFlow: Flow<GetTokenResult?> get() = callbackFlow {
     val job = Job()
     val listener = FirebaseAuth.IdTokenListener {
         GlobalScope.launch(job) {
             val token = it.currentUser?.getIdToken(false)?.await()
-            channel.send(token)
+            send(token)
         }
     }
     addIdTokenListener(listener)
 
-    channel.invokeOnClose {
+    awaitClose {
         removeIdTokenListener(listener)
         job.cancel()
     }

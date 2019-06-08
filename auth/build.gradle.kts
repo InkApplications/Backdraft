@@ -23,10 +23,10 @@ android {
 dependencies {
     implementation(project(":tasks"))
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.3.21")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.3.31")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.0-M1")
 
-    api("com.google.firebase:firebase-auth:16.2.1")
+    api("com.google.firebase:firebase-auth:17.0.0")
 
     testImplementation("junit:junit:4.12")
 }
