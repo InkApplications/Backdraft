@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.callbackFlow
  * Send snapshot updates from a collection into a flow.
  */
 @FlowPreview
-val CollectionReference.snapshotFlow get() = callbackFlow<QuerySnapshot?> {
+val Query.snapshotFlow get() = callbackFlow<QuerySnapshot?> {
     val registration = addSnapshotListener { snapshot, error ->
         if (error != null) cancel(CancellationException("Snapshot returned Error", error))
         else offer(snapshot)
