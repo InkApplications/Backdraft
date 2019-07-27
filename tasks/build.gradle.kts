@@ -19,10 +19,10 @@ android {
 
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.3.31")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.0-M1")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.3.41")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.0-RC")
 
-    api("com.google.firebase:firebase-common:17.1.0")
+    api("com.google.firebase:firebase-common:18.0.0")
 
     testImplementation("junit:junit:4.12")
 }
