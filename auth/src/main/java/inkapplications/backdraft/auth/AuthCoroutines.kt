@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
  */
 @FlowPreview
 val FirebaseAuth.authStateFlow: Flow<FirebaseAuth> get() = callbackFlow {
-    val listener: (FirebaseAuth) -> Unit = { offer(it) }
+    val listener = FirebaseAuth.AuthStateListener { offer(it) }
     addAuthStateListener(listener)
     awaitClose { removeAuthStateListener(listener) }
 }
